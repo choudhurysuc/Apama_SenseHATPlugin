@@ -21,13 +21,13 @@ Supported EPL API (i.e components) :
    * Usual misc power, networking, cables   
 
 ### Software
-  Apama Core Community Edition v10.3.0 (Oct 2018 release), or later, for Linux on ARM
-  Linux installation on the RaspberryPi. Tested on Raspbian
-  Python 3.6 (to install and setup python 3.6 source : <https://github.com/kpalf/ApamaSenseHat> )
-  
+  * Apama Core Community Edition v10.3.0 (Oct 2018 release), or later, for Linux on ARM
+  * Linux installation on the RaspberryPi. Tested on Raspbian
+  * Python 3.6 (to install and setup python 3.6 source : <https://github.com/kpalf/ApamaSenseHat> ) .
+ 
   
 ##  Test framework  : (Using the SenseHAT, via Plugin, from Apama EPL )
-  using PySys framework , can test the senseHAT EPL API functionality.
+  Using PySys framework , can test the senseHAT EPL API functionality.
   Following are examples to play a Raspberry Pi SenseHAT device using senseHAT EPL API's from 
   Apama EPL running in a Correlator process.
   
