@@ -1,0 +1,203 @@
+package com.apamax.sensehat;
+using com.apama.exceptions.Exception;
+
+/** colour helper utility */
+event Color 
+{
+	wildcard integer  r;
+	
+	wildcard integer g;
+	
+	wildcard integer b;
+		
+	static action Of(integer r, integer g, integer b) returns Color
+	{		
+		Color c := new Color;
+		c.r := r;
+		c.g := g;
+		c.b := b;
+		
+		return c;
+	}
+	
+	action R() returns integer
+	{
+		return r;
+	}
+	
+	action G() returns integer
+	{
+		return g;
+	}
+	
+	action B() returns integer
+	{
+		return b;
+	}
+}
+
+/** private event - Joystick InputEvent helper utility */
+
+event InputEvent
+{
+	string actionValue;
+	string directionValue ;
+	float timestamp ;
+}
+
+/** IMUData data axes helper utility */
+event IMUData
+{
+	float pitch;
+	float roll;
+	float yaw;
+	
+	action getPitch() returns float
+	{
+		return pitch;
+	}
+	
+	action getRoll() returns float
+	{
+		return roll;
+	}
+	
+	action getYaw() returns float
+	{
+		return yaw;
+	}
+}
+
+/** IMUData Raw axes helper utility */
+event IMUDataRaw
+{
+	float x;
+	float y;
+	float z;
+	
+	action getX() returns float
+	{
+		return x;
+	}
+	
+	action getY() returns float
+	{
+		return y;
+	}
+	
+	action getZ() returns float
+	{
+		return z;
+	}
+}
+
+event JoystickAction
+{
+	constant string PRESSED := "pressed";
+	
+	constant string RELEASED := "released";
+	
+	constant string HELD := "held";
+	
+	string value;
+	
+	
+	action _setValue(string pValue)
+	{
+		value := pValue;
+	}
+	
+	
+	static action create(string pValue) returns JoystickAction
+	{
+		JoystickAction ja := new JoystickAction;
+		
+		if pValue = JoystickAction.PRESSED or pValue = JoystickAction.RELEASED or pValue = JoystickAction.HELD then
+		{
+			ja._setValue(pValue);
+			return ja;
+		}
+		
+		throw Exception("Unsupported action: " + pValue ,"IllegalArgumentException"); 
+	}
+	
+}
+
+event JoystickDirection
+{
+	constant string UP := "up";
+	
+	constant string DOWN := "down";
+	
+	constant string LEFT := "left";
+	
+	constant string RIGHT := "right";
+	
+	constant string MIDDLE := "middle"; 
+	
+	string value;
+	
+	action _setValue(string pValue)
+	{
+		value := pValue;
+	}
+	
+	static action create(string pValue) returns JoystickDirection
+	{
+		JoystickDirection jd := new JoystickDirection;
+		
+		if pValue = JoystickDirection.UP or pValue = JoystickDirection.DOWN or pValue = JoystickDirection.LEFT or pValue = JoystickDirection.RIGHT or pValue = JoystickDirection.MIDDLE then
+		{
+			jd._setValue(pValue);
+			return jd;
+		}
+		
+		throw Exception("Unsupported direction: " + pValue ,"IllegalArgumentException"); 
+	}
+	
+}
+
+event JoystickEvent
+{
+	JoystickAction jaction;
+	
+	JoystickDirection jdirection;
+	
+	float timestamp;
+	
+	static action create(string jaction, string jdirection, float jtimestamp) returns JoystickEvent
+	{
+		JoystickEvent jsevt := new JoystickEvent;
+		
+		jsevt.jaction := JoystickAction.create(jaction);
+		jsevt.jdirection := JoystickDirection.create(jdirection);
+		jsevt.timestamp := jtimestamp;
+		
+		return jsevt;
+	}
+	
+	action getAction() returns JoystickAction
+	{
+		return jaction;
+	}
+	
+	action getDirection() returns JoystickDirection
+	{
+		return jdirection;
+	}
+	
+	action getTimestamp() returns float {
+        return timestamp;
+    }	
+}
+
+event JoystickControl
+{
+	constant integer CTRL_UP := 1;
+	constant integer CTRL_DOWN := 2;
+	constant integer CTRL_LEFT := 3;
+	constant integer CTRL_RIGHT := 4;
+	constant integer CTRL_MIDDLE := 5;
+	
+	integer controlType;
+}

@@ -1,0 +1,54 @@
+package com.apmax.test3;
+using com.apamax.sensehat.SenseHat;
+using com.apamax.sensehat.Color;
+ 
+
+/** This monitor is responsible for ...  */
+monitor TemperatureBar {
+	
+	integer count := 0;	
+	
+	action onload() {
+		
+		log "Loaded monitor TemperatureBar" at INFO;
+		
+		SenseHat senseHat := SenseHat.create();
+				
+		senseHat.ledMatrix.clear();
+		
+		Color bg;	 
+				
+		while(true)
+		{
+			if count >= 100 then		
+			{
+				log "Test done" at INFO;
+				senseHat.ledMatrix.clear();
+				break;
+			}
+
+			count := count +1;
+			
+			float t := senseHat.envSensor.getTemperature();
+			float p := senseHat.envSensor.getPressure();
+			float h := senseHat.envSensor.getHumidity();
+			
+			Color bg;
+			if t > 28.10 and t < 35.50 then
+			{
+				bg := Color.Of(0, 100, 0); // green
+			}
+			else
+			{
+				bg := Color.Of(100, 0, 0); //red
+			}		 
+			
+		 
+		   string msg := "Temperature = " + t.toString() +" Pressure= " + p.toString() + " Humidity= " + h.toString();
+		 
+		   senseHat.ledMatrix.showMessageWithParam(msg, 0.02, Color.Of(255, 255, 255) ,bg);
+		}
+		
+		senseHat.ledMatrix.clear();
+	}
+}

@@ -1,0 +1,81 @@
+package com.apmax.test;
+using com.apamax.sensehat.SenseHat;
+using com.apamax.sensehat.Color;
+
+event done
+{
+	
+}
+/** This monitor is responsible for ...  */
+monitor TestSenseHAT {
+	
+	integer count := 0;
+	
+	action onload() {
+		
+		log "Loaded monitor TestSenseHAT" at INFO;
+		
+		SenseHat senseHat := SenseHat.create();
+				
+		//senseHat.ledMatrix.showMessage("Suresh");
+				
+		on all wait(1.0) and not done()
+		{
+			log "Running wait : " + count.toString() at INFO;
+			senseHat.ledMatrix.clear();
+			
+			if count = 0 then
+			{	
+				Color c := Color.Of(255, 0, 0);
+				senseHat.ledMatrix.setPixel(0, 0, c);
+				
+				c := Color.Of(0, 255, 0);
+				senseHat.ledMatrix.setPixel(0, 7, c);
+				
+				c := Color.Of(0, 0, 255);
+				senseHat.ledMatrix.setPixel(7, 0, c);
+				
+				c := Color.Of(255, 0, 255);
+				senseHat.ledMatrix.setPixel(7, 7, c);				
+			}
+			else if count = 1 then
+			{				
+				Color X := Color.Of(255, 0, 0);  //Red
+				Color O := Color.Of(255, 255, 255); //White
+				
+				sequence<Color> question_mark := [O, O, O, X, X, O, O, O,
+				                                  O, O, X, O, O, X, O, O,
+				                                  O, O, O, O, O, X, O, O,
+				                                  O, O, O, O, X, O, O, O,
+				                                  O, O, O, X, O, O, O, O,
+				                                  O, O, O, X, O, O, O, O,
+				                                  O, O, O, O, O, O, O, O,
+				                                  O, O, O, X, O, O, O, O ];
+				
+				senseHat.ledMatrix.setPixels(question_mark);
+				
+			}
+			
+			else if count = 2 then
+			{					
+				senseHat.ledMatrix.showMessageWithSpeed("APAMA", 0.1);				
+			}
+			
+			else if count = 3 then
+			{						
+				senseHat.ledMatrix.showMessage("T- "+ senseHat.envSensor.getTemperature().toString());				
+			}
+			else if count = 4 then
+			{						
+				senseHat.ledMatrix.showMessage("H-" + senseHat.envSensor.getHumidity().toString());				
+			}
+			else
+			{
+				log "Test done" at INFO;
+				route done();
+			}
+			
+			count := count +1;
+		}		
+	}
+}

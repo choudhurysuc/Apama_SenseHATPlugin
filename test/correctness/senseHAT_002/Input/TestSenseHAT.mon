@@ -1,0 +1,39 @@
+package com.apmax.test;
+using com.apamax.sensehat.SenseHat;
+using com.apamax.sensehat.Color;
+
+
+/** This monitor is responsible for ...  */
+monitor RandomSparkles {
+	
+	integer count := 0;
+	
+	action onload() {
+		
+		log "Loaded monitor RandomSparkles" at INFO;
+		
+		SenseHat senseHat := SenseHat.create();
+				
+		//senseHat.ledMatrix.showMessage("Suresh");
+				
+		on all wait(0.01) and not done()
+		{
+			
+			integer x := integer.rand(8);
+			integer y := integer.rand(7);
+			integer r := integer.rand(255);
+			integer g := integer.rand(255);
+			integer b := integer.rand(255);	
+			
+			senseHat.ledMatrix.setPixel(x, y, Color.Of(r, g, b));
+			
+			if count >= 1000 then		
+			{
+				log "Test done" at INFO;
+				route done();
+			}
+			
+			count := count +1;
+		}
+	}
+}
